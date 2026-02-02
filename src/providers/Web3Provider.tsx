@@ -15,12 +15,20 @@ const NETWORK_ENV =
   process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT ?? 'mainnet';
 const IS_MAINNET = NETWORK_ENV === 'mainnet';
 
+const normalizeUrl = (url: string) => url.replace(/\/+$/, '');
+const appUrl = normalizeUrl(
+  process.env.NEXT_PUBLIC_DOMAIN ??
+    (typeof window !== 'undefined'
+      ? window.location.origin
+      : 'http://localhost:3000')
+);
+
 // Set up metadata
 const metadata = {
   name: SITE_NAME,
   description: SITE_DESCRIPTION,
-  url: process.env.NEXT_PUBLIC_DOMAIN!,
-  icons: [`${process.env.NEXT_PUBLIC_DOMAIN!}/assets/goc-token.svg`],
+  url: appUrl,
+  icons: [`${appUrl}/assets/goc-token.svg`],
 };
 
 // Create the modal
