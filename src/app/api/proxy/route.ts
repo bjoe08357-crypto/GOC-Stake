@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 
 async function forwardRequest(request: Request): Promise<NextResponse> {
+  const networkEnv =
+    process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT ?? 'mainnet';
   const rpcUrl =
-    process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT === 'mainnet'
+    networkEnv === 'mainnet'
       ? process.env.RPC_MAINNET!
       : process.env.RPC_TESTNET!;
 

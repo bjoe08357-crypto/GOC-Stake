@@ -5,10 +5,11 @@ import { http } from 'wagmi';
 
 export const projectId = '5b151783bdfb85d5f27f3ef7ae0a02f0';
 
-export const networks =
-  process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT === 'mainnet'
-    ? [mainnet]
-    : [sepolia];
+const NETWORK_ENV =
+  process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT ?? 'mainnet';
+const IS_MAINNET = NETWORK_ENV === 'mainnet';
+
+export const networks = IS_MAINNET ? [mainnet] : [sepolia];
 
 export const wagmiAdapter = new WagmiAdapter({
   storage: createStorage({

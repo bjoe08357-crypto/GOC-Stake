@@ -11,6 +11,10 @@ import { SITE_DESCRIPTION, SITE_NAME } from '@/lib/const';
 // Set up queryClient
 const queryClient = new QueryClient();
 
+const NETWORK_ENV =
+  process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT ?? 'mainnet';
+const IS_MAINNET = NETWORK_ENV === 'mainnet';
+
 // Set up metadata
 const metadata = {
   name: SITE_NAME,
@@ -23,14 +27,8 @@ const metadata = {
 export const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
-  networks:
-    process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT === 'mainnet'
-      ? [mainnet]
-      : [sepolia],
-  defaultNetwork:
-    process.env.NEXT_PUBLIC_BLOCKCHAIN_ENVIRONMENT === 'mainnet'
-      ? mainnet
-      : sepolia,
+  networks: IS_MAINNET ? [mainnet] : [sepolia],
+  defaultNetwork: IS_MAINNET ? mainnet : sepolia,
   metadata,
   allWallets: 'SHOW',
   featuredWalletIds: [
