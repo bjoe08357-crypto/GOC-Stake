@@ -58,6 +58,13 @@ async function main() {
   console.log(`Balance: ${ethers.formatEther(balance)} ETH`);
   console.log(`Staking token: ${stakingToken}`);
 
+  const tokenCode = await provider.getCode(stakingToken);
+  if (tokenCode === '0x') {
+    throw new Error(
+      'STAKING_TOKEN_ADDRESS has no contract code on mainnet. Verify the token address.'
+    );
+  }
+
   const artifactPath = path.resolve('src/abi/Staking.json');
   const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
 
@@ -66,22 +73,73 @@ async function main() {
     artifact.bytecode,
     wallet
   );
-  const deployTx = factory.getDeployTransaction(stakingToken);
-  const gasEstimate = await provider.estimateGas(deployTx);
+  const deployTx = await factory.getDeployTransaction(stakingToken);
   const feeData = await provider.getFeeData();
-  const gasPrice = feeData.maxFeePerGas ?? feeData.gasPrice;
-  if (!gasPrice) {
-    throw new Error('Unable to estimate gas price.');
-  }
-  const deployCost = gasEstimate * gasPrice;
 
-  if (balance < deployCost) {
+  const gasLimitOverride = env.DEPLOY_GAS_LIMIT
+    ? BigInt(env.DEPLOY_GAS_LIMIT)
+    : null;
+  let gasLimit;
+  if (gasLimitOverride) {
+    gasLimit = gasLimitOverride;
+    console.log(`Using DEPLOY_GAS_LIMIT: ${gasLimit.toString()}`);
+  } else {
+    try {
+      const gasEstimate = await provider.estimateGas({
+        ...deployTx,
+        from: wallet.address,
+      });
+      gasLimit = gasEstimate;
+      console.log(`Gas estimate: ${gasLimit.toString()}`);
+    } catch (error) {
+      throw new Error(
+        'Gas estimation failed. Set DEPLOY_GAS_LIMIT to proceed.'
+      );
+    }
+  }
+
+  const parseGwei = (value) =>
+    value ? ethers.parseUnits(value, 'gwei') : null;
+  const maxFeePerGas =
+    parseGwei(env.DEPLOY_MAX_FEE_GWEI) ??
+    feeData.maxFeePerGas ??
+    feeData.gasPrice;
+  const maxPriorityFeePerGas =
+    parseGwei(env.DEPLOY_PRIORITY_FEE_GWEI) ??
+    feeData.maxPriorityFeePerGas ??
+    ethers.parseUnits('1.5', 'gwei');
+  if (!maxFeePerGas) {
+    throw new Error('Unable to determine max fee per gas.');
+  }
+
+  if (feeData.lastBaseFeePerGas) {
+    console.log(
+      `Base fee: ${ethers.formatUnits(feeData.lastBaseFeePerGas, 'gwei')} gwei`
+    );
+  }
+  console.log(
+    `Max fee: ${ethers.formatUnits(maxFeePerGas, 'gwei')} gwei`
+  );
+  console.log(
+    `Priority fee: ${ethers.formatUnits(maxPriorityFeePerGas, 'gwei')} gwei`
+  );
+  const maxCost = gasLimit * maxFeePerGas;
+  console.log(`Max cost: ${ethers.formatEther(maxCost)} ETH`);
+
+  if (balance < maxCost) {
+    const missing = maxCost - balance;
     throw new Error(
-      `Insufficient ETH. Estimated cost: ${ethers.formatEther(deployCost)} ETH`
+      `Insufficient ETH. Missing ~${ethers.formatEther(missing)} ETH`
     );
   }
 
-  const contract = await factory.deploy(stakingToken);
+  const nonceOverride = env.DEPLOY_NONCE ? Number(env.DEPLOY_NONCE) : null;
+  const contract = await factory.deploy(stakingToken, {
+    gasLimit,
+    maxFeePerGas,
+    maxPriorityFeePerGas,
+    ...(nonceOverride !== null ? { nonce: nonceOverride } : {}),
+  });
   const deploymentTx = contract.deploymentTransaction();
   if (deploymentTx?.hash) {
     console.log(`Deploy tx: ${deploymentTx.hash}`);
