@@ -12,7 +12,7 @@ import {
   calculateMultiplier,
   isReachedMaxActiveStakeLimit,
 } from '@/lib/utils/number';
-import { useFeeData, useWriteContract } from 'wagmi';
+import { useChainId, useFeeData, useWriteContract } from 'wagmi';
 import {
   CHAIN_ID,
   MAX_LOCK_PERIOD_IN_DAYS,
@@ -55,6 +55,8 @@ const TabStake: React.FC<{
     index: 0,
     status: 'loading',
   });
+
+  const chainId = useChainId();
 
   useEffect(() => {
     switch (stakeStep) {
@@ -157,16 +159,34 @@ const TabStake: React.FC<{
       return;
     }
 
+    if (chainId !== CHAIN_ID) {
+      setErrorMessage('Please switch to Ethereum Mainnet to stake.');
+      setOpenModalStep(true);
+      setStakeStep('ERROR');
+      return;
+    }
+
     setOpenModalStep(true);
     startTransition(async () => {
       const amountToStake = tokenToWei(token);
-      const currentAllowance = await readContract(config, {
-        abi: erc20Abi,
-        address: TOKEN_ADDRESS as `0x${string}`,
-        functionName: 'allowance',
-        args: [userAddress as `0x${string}`, SC_ADDRESS as `0x${string}`],
-        chainId: CHAIN_ID,
-      });
+      let currentAllowance: bigint;
+      try {
+        currentAllowance = await readContract(config, {
+          abi: erc20Abi,
+          address: TOKEN_ADDRESS as `0x${string}`,
+          functionName: 'allowance',
+          args: [userAddress as `0x${string}`, SC_ADDRESS as `0x${string}`],
+          chainId: CHAIN_ID,
+        });
+      } catch (error: any) {
+        if (error?.shortMessage) {
+          setErrorMessage(error.shortMessage);
+        } else {
+          setErrorMessage('Unable to read allowance. Check your network.');
+        }
+        setStakeStep('ERROR');
+        return;
+      }
       if (currentAllowance < amountToStake) {
         let approveTx;
         try {
