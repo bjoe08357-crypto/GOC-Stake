@@ -33,6 +33,7 @@ import { useCurrentUser } from '@/context/UserContext';
 import { useGeneral } from '@/context/GeneralContext';
 import { Tooltip } from '@/components/atoms';
 import { ConnectButton, Loading } from '@/components/molecules';
+import { isAddress } from 'ethers';
 import { ModalSteps, ModalStepStatus } from './ModalSteps';
 import ModalErrorLimit from './ModalErrorLimit';
 
@@ -147,8 +148,8 @@ const TabStake: React.FC<{
 
   const handleStake = async () => {
     setErrorMessage('');
-    if (!SC_ADDRESS) {
-      setErrorMessage('Staking contract is not configured.');
+    if (!SC_ADDRESS || !isAddress(SC_ADDRESS)) {
+      setErrorMessage('Staking contract address is invalid.');
       setOpenModalStep(true);
       setStakeStep('ERROR');
       return;
