@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { IMAGE_PATH } from '@/utils/constant';
 import { Header, LoadingState } from '@/components/organisms';
 import TabStake from '@/components/organisms/home/TabStake';
-import SectionInfo from '@/components/organisms/home/SectionInfo';
 import TabWithdraw from '@/components/organisms/home/TabWithdraw';
 import { weiToToken } from '@/utils/helpers';
 import { useGeneral } from '@/context/GeneralContext';
@@ -70,7 +68,8 @@ export default function Home() {
       <div
         className="bg-cover bg-center pt-[90px]"
         style={{
-          backgroundImage: `url(${IMAGE_PATH.bg3})`,
+          backgroundImage:
+            'linear-gradient(135deg, #1f1f1f 0%, #3a3a4b 50%, #6b6f8a 100%)',
         }}
       >
         <Header />
@@ -164,7 +163,6 @@ export default function Home() {
           backdropFilter: 'blur(15px)',
         }}
       />
-      <SectionInfo />
     </>
   );
 }
