@@ -147,6 +147,12 @@ const TabStake: React.FC<{
 
   const handleStake = async () => {
     setErrorMessage('');
+    if (!SC_ADDRESS) {
+      setErrorMessage('Staking contract is not configured.');
+      setOpenModalStep(true);
+      setStakeStep('ERROR');
+      return;
+    }
     const isLimit = isReachedMaxActiveStakeLimit(token, totalActiveUserStake);
     if (isLimit) {
       setOpenModalErrorLimit(true);
