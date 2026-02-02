@@ -117,13 +117,22 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="text-content/90 mt-12 text-center text-sm font-semibold tracking-wide sm:text-left sm:text-[15px]">
-                  {`${TOKEN.name} leads the world in merging NFC technology with innovative
-              apparel, revolutionizing user experiences with seamless Web3
-              integration on the Ethereum blockchain. Leveraging Ethereum's
-              robust, secure, and transparent ecosystem, ${TOKEN.name} ensures
-              unparalleled authenticity and traceability in fashion tech. Choose
-              ${TOKEN.name} for the ultimate blend of tech, fashion, and decentralized
-              connectivity. Embrace the future with ${TOKEN.name}.`}
+                  <p>
+                    The GOC Stake Platform is a dedicated testing and
+                    demonstration environment built to showcase how token
+                    staking works on the Ethereum blockchain. It is designed
+                    for trial use, feature validation, and live demos of
+                    staking, rewards distribution, and claim mechanisms before
+                    full production deployment.
+                  </p>
+                  <p className="mt-4">
+                    By using Ethereum&apos;s secure and transparent
+                    infrastructure, the platform allows users and partners to
+                    safely experience the staking flow, wallet interaction, and
+                    reward logic in a controlled setup. The GOC Stake Platform
+                    serves as a practical testbed for refining staking features
+                    and preparing future production-ready releases.
+                  </p>
                 </div>
               </div>
               <div>

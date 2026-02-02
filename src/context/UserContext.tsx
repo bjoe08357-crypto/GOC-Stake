@@ -82,7 +82,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     refetchStakes,
     userToken,
     refetchUserToken,
-    totalActiveUserStake: totalActiveUserStake as bigint,
+    totalActiveUserStake: (totalActiveUserStake ?? 0n) as bigint,
     refetchTotalActiveUserStake,
   };
 
