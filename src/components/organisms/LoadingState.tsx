@@ -5,7 +5,7 @@ export const LoadingState: React.FC = () => {
     <div className="bg-base-bg absolute inset-0 z-50 flex items-center justify-center">
       <Image
         src="/assets/goc-token.svg"
-        alt="GOC loading"
+        alt="BOB loading"
         className="h-40 w-40"
         loading="lazy"
         width={160}

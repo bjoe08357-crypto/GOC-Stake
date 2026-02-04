@@ -17,7 +17,7 @@ export default function Home() {
   const [openModalBuyToken, setOpenModalBuyToken] = useState<boolean>(false);
 
   // * Const
-  const initGlobalStaked = 8000000; // 8 million GOC
+  const initGlobalStaked = 8000000; // 8 million BOB
   const initUniqueStakers = 500; // 500 unique stakers
 
   // * Functions
@@ -56,7 +56,7 @@ export default function Home() {
           </button>
           <Link
             target="_blank"
-            href="https://indodax.com/market/GOCIDR"
+            href="https://indodax.com/market/BOBIDR"
             className="bg-title/90 hover:bg-title flex h-9 w-full items-center justify-center rounded-md"
           >
             <p className="text-base-bg/80 font-semibold">
@@ -118,7 +118,7 @@ export default function Home() {
                 </div>
                 <div className="text-content/90 mt-12 text-center text-sm font-semibold tracking-wide sm:text-left sm:text-[15px]">
                   <p>
-                    The GOC Stake Platform is a dedicated testing and
+                    The BOB Stake Platform is a dedicated testing and
                     demonstration environment built to showcase how token
                     staking works on the Ethereum blockchain. It is designed
                     for trial use, feature validation, and live demos of
@@ -129,7 +129,7 @@ export default function Home() {
                     By using Ethereum&apos;s secure and transparent
                     infrastructure, the platform allows users and partners to
                     safely experience the staking flow, wallet interaction, and
-                    reward logic in a controlled setup. The GOC Stake Platform
+                    reward logic in a controlled setup. The BOB Stake Platform
                     serves as a practical testbed for refining staking features
                     and preparing future production-ready releases.
                   </p>

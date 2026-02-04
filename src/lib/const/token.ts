@@ -1,9 +1,9 @@
 export const TOKEN = {
-  name: 'GOC',
-  symbol: 'GOC',
+  name: 'BOB',
+  symbol: 'BOB',
   address: '0x2e105875765e46d93A301A9FE0e81d98d070200e',
-  displayName: 'GOC Token',
-  shortSymbol: '$GOC',
+  displayName: 'BOB Token',
+  shortSymbol: '$BOB',
 } as const;
 
 export const REWARDS_WALLET =

@@ -1,9 +1,9 @@
 import { mainnet, sepolia } from 'wagmi/chains';
 import { TOKEN } from './token';
 
-export const SITE_NAME = 'GOC Staking';
+export const SITE_NAME = 'BOB Staking';
 export const SITE_DESCRIPTION =
-  'The GOC Stake Platform is a dedicated testing and demonstration environment built to showcase how token staking works on the Ethereum blockchain. It is designed for trial use, feature validation, and live demos of staking, rewards distribution, and claim mechanisms before full production deployment. By using Ethereum\'s secure and transparent infrastructure, the platform allows users and partners to safely experience the staking flow, wallet interaction, and reward logic in a controlled setup. The GOC Stake Platform serves as a practical testbed for refining staking features and preparing future production-ready releases.';
+  'The BOB Stake Platform is a dedicated testing and demonstration environment built to showcase how token staking works on the Ethereum blockchain. It is designed for trial use, feature validation, and live demos of staking, rewards distribution, and claim mechanisms before full production deployment. By using Ethereum\'s secure and transparent infrastructure, the platform allows users and partners to safely experience the staking flow, wallet interaction, and reward logic in a controlled setup. The BOB Stake Platform serves as a practical testbed for refining staking features and preparing future production-ready releases.';
 const normalizeAddress = (value?: string) =>
   value ? value.trim().replace(/["'\s]/g, '') : '';
 
